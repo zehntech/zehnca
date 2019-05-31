@@ -1,0 +1,173 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding">
+
+    <div class="box">
+
+        <div class="box-header">
+            <h2>
+                <i class="fa fa-list"></i> Users
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="filter" type="search" placeholder="Search"
+                           class="form-control input-sm w-auto inline m-r" ng-model="searchQuery"/>
+
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a href="" data-target="#myModal_autocomplete" data-toggle="modal" class="btn btn-default btn-sm pull-right"><i
+                            class="fa fa-user-plus"></i> Invite User </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table ng-table="tableParams" class="table table-striped table-hover">
+                    <tbody>
+                    <tr data-ng-repeat="item in $data | filter:searchQuery">
+                        <td data-title="'User Name'" sortable="'name'">
+                            <span class="theme-font text-wrap" >{{item.name}}</span>
+
+                        </td>
+                        <td data-title="'Email'" sortable="'email'">
+                            <span>{{item.email}}</span>
+                        </td>
+                        <td data-title="'Role'" sortable="'role'">
+                            <span>{{item.role}}</span>
+                        </td>
+                        <td data-title="'Status'" sortable="'emailVerified'">
+                                <span ng-if="!item.emailVerified"
+                                      class="label label-sm warning">Inactive</span>
+
+                                <span ng-if="item.emailVerified"
+                                      class="label label-sm success">Active</span>
+                        </td>
+                        <td data-title="'Create At'" sortable="'created'">
+                            <span>{{item.created | date: 'MMM dd, yyyy'}}</span>
+                        </td>
+
+                        <td data-title="'Action'" align="center">
+                            <div class="dropdown ">
+                                <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                                    <i class="material-icons">&#xe5d4;</i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-scale pull-right">
+                                    <a class="dropdown-item" href>
+                                        <span ng-click=""> Edit</span>
+                                    </a>
+                                    <a class="dropdown-item" href>
+                                        <span ng-click=""> Delete</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+    <div ng-if="loading" class="overlay"></div>
+    <div ng-if="loading" class="loading-img"></div>
+
+    <!-- END MAIN CONTENT -->
+</div>
+
+ <div id="myModal_autocomplete" class="modal fade animate" data-backdrop="static" role="dialog"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content zoom">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h6 class="modal-title theme-font">Invite your friends, colleagues!</h6>
+                            </div>
+                            <form ng-submit="updateInviteUserInfo()" class="form-horizontal form-row-seperated"
+                                  name="form">
+                                <div class="modal-body ">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 form-control-label">Name (Optional)</label>
+
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+												</span>
+                                                <input type="text" ng-model="inviteUser.name" placeholder="Name"
+                                                       name="name" class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group"
+                                         ng-class="{'has-error':(alreadyExit || (!inviteUser.email && !form.emailId.$pristine) || form.emailId.$invalid && !form.emailId.$pristine && form.emailId.$touched)}">
+                                        <label class="col-sm-3 form-control-label">Email ID <span
+                                                class="required">*</span></label>
+
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-envelope"></i>
+												</span>
+                                                <input type="email" ng-model="inviteUser.email" required maxlength="150" ng-blur="checkEmail(inviteUser.email)"
+                                                       placeholder="Email Id"
+                                                       name="emailId" class="form-control"/>
+                                            </div>
+                                            <small ng-show="((!inviteUser.email && !form.emailId.$pristine) || form.emailId.$invalid && !form.emailId.$pristine && form.emailId.$touched)"
+                                               class="help-block">
+                                                Email Id is required
+                                            </small>
+                                            <small class="help-block" ng-show="alreadyExit" >
+                                                {{alreadyExit}}
+                                            </small>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 form-control-label">Message (Optional)</label>
+
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-text-width"></i>
+												</span>
+                                                <textarea rows="3" ng-model="inviteUser.message" placeholder="Message" maxlength="120"
+                                                       name="message" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group last">
+                                        <label class="col-sm-3 form-control-label">Role</label>
+
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-user-plus"></i>
+												</span>
+                                                <select class="form-control" ng-model="inviteUser.role">
+                                                    <option value="admin">Admin</option>
+                                                    <option value="user">User</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                                    <button type="submit" class="btn btn-primary " ng-disabled="form.$invalid || isProcessing || alreadyExit"  id="inviteBtn">
+                                        INVITE
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+<script>
+
+    $('.modal').on('shown.bs.modal', function () {
+        $(this).find('[autofocus]').focus();
+    });
+</script>

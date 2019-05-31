@@ -1,0 +1,170 @@
+<div class="padding">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-left m-r">
+            <span class="w-40 dker text-center rounded">
+              <i class="material-icons">shopping_basket</i>
+            </span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.instance">{{totalInstances}} <span class="text-sm">Instances</span></a>
+                    </h4>
+                    <small class="text-muted">9 regions.</small>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a ">
+                <div class="pull-right m-l">
+            <span class="w-40 dker text-center rounded">
+              <i class="material-icons">local_shipping</i>
+            </span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.snapshot">{{totalSnapshots}} <span class="text-sm">Snapshots</span></a>
+                    </h4>
+                    <small class="text-muted">9 regions.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-left m-r">
+            <span class="w-40 dker text-center rounded">
+              <i class="material-icons">comment</i>
+            </span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.volume">{{totalVolumes}} <span class="text-sm">Volumes</span></a></h4>
+                    <small class="text-muted">9 regions.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-right m-l">
+            <span class="w-40 dker text-center rounded">
+              <i class="material-icons">people</i>
+            </span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.users">{{totalUsers}} <span class="text-sm">Members</span></a></h4>
+                    <small class="text-muted">In a company</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-right m-l">
+                    <span class="w-40 dker text-center rounded"> <i class="material-icons">alarm</i></span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.scheduler">{{totalInstanceScheduler}} <span
+                            class="text-sm"> Total Instance Trigger</span></a></h4>
+                    <small class="text-muted">1 waiting.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-left m-r">
+                    <span ui-jp="sparkline" ui-refresh="app.setting.color"
+                          ui-options="[{{(totalScheduleInstance / totalInstances) * 100 | number : 0 }}, {{(100-(totalScheduleInstance / totalInstances) * 100) | number : 0 }}], {type:'pie', height:36, sliceColors:['#0cc2aa','#f1f2f3']}"
+                          class="sparkline inline"></span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.scheduleInstance">{{totalScheduleInstance}} <span
+                            class="text-sm">Schedule Instance</span></a></h4>
+                    <small class="text-muted">Running.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-right m-l">
+                    <span class="w-40 dker text-center rounded"> <i class="material-icons">alarm</i></span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.snapshotScheduler">{{totalSnapshotScheduler}} <span
+                            class="text-sm"> Total Snapshot Trigger</span></a></h4>
+                    <small class="text-muted">1 waiting.</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="box p-a">
+                <div class="pull-left m-r">
+                    <span ui-jp="sparkline" ui-refresh="app.setting.color"
+                          ui-options="[{{(totalScheduleSnapshot / totalSnapshots) * 100 | number : 0 }}, {{(100-(totalScheduleSnapshot / totalSnapshots) * 100) | number : 0 }}], {type:'pie', height:36, sliceColors:['#0cc2aa','#f1f2f3']}"
+                          class="sparkline inline"></span>
+                </div>
+                <div class="clear">
+                    <h4 class="m-a-0 text-md"><a href ui-sref="app.scheduleSnapshot">{{totalSnapshotScheduler}} <span
+                            class="text-sm">Schedule Snapshot</span></a></h4>
+                    <small class="text-muted">Running.</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box" style="min-height: 300px;">
+                <div class="box-header">
+                    <h3>Next executions
+
+                    <span style="margin-left: 20px;font-size: 13px; font-weight: 300"><span style="color: #0cc2aa; "
+                                                                                            class="fa fa-circle"></span> Running
+                    <span style="color: #fcc100;" class="fa fa-circle"></span> Stopped</span></h3>
+                </div>
+                <div class="box-body">
+                    <h4 class="text-center p-t-lg" ng-if="!data4">No data found for graph..!!</h4>
+                    <div gantt data="data4" headers="options.headers" headers-formats="headersFormats"
+                         view-scale="options.scale" task-content="options.taskContent"
+                            column-width="getColumnWidth(options.width, options.scale, options.zoom)"
+                            auto-expand="options.autoExpand" expand-to-fit="options.expandToFit">
+                        <gantt-tree>
+                        </gantt-tree>
+                        <gantt-tooltips></gantt-tooltips>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-sm-6 col-md-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Trigger Status</h3>
+                </div>
+                <div class="box-body">
+                    <div class="p-y-md">
+                        <div ui-jp="plot" ui-refresh="app.setting.color" ui-options="
+                {{p_p_3}},
+                {
+                  series: { pie: { show: true, innerRadius: 0, stroke: { width: 2, color: '#fff' }, label: { show: true, threshold: 0.05 }, tilt: 0.5, startAngle: 30 } },
+                  legend: {backgroundColor: 'transparent'},
+                  colors: ['{{app.setting.color.warn}}','{{app.setting.color.primary}}'],
+                  grid: { hoverable: true, clickable: true, borderWidth: 0, color: 'rgba(120,120,120,0.5)' },
+                  tooltip: true,
+                  tooltipOpts: { content: '%s: %p.0%' }
+                }
+              " style="height:160px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

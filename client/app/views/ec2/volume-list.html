@@ -1,0 +1,260 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="descVolumes()">
+
+    <div class="box">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="box-header">
+            <h2 class="caption">
+                <i class="fa fa-list"></i> Volumes
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="filter" type="search" placeholder="Search"
+                           class="form-control input-sm w-auto inline m-r" ng-model="searchQuery"/>
+
+                    <a style="margin-left: 4px" class="text-success" ng-click="descVolumes('all')">Show All
+                        Region Volumes</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a href="" ng-click="setVolume()" class="btn btn-default btn-sm pull-right"><i
+                            class="fa fa-plus"></i> Create Volume </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table st-table="data" st-pipe="callServer" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th st-sort="VolumeId">Volume ID</th>
+                        <th st-sort="VolumeType">Volume Type</th>
+                        <th st-sort="Size">Size</th>
+                        <th st-sort="SnapshotId">Snapshot</th>
+                        <th st-sort="CreateTime">Created at</th>
+                        <th st-sort="AvailabilityZone">Region</th>
+                        <th st-sort="Attachments[0].InstanceId">Attached To</th>
+                        <th st-sort="State">State</th>
+                        <th st-sort="Encrypted">Encrypted</th>
+                        <th>Action</th>
+                    </tr>
+
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr data-ng-repeat="item in data | filter:searchQuery">
+
+                        <td>
+                            <span class="theme-font">{{item.VolumeId}}</span>
+
+                        </td>
+                        <td>
+                            <span>{{item.VolumeType}}</span>
+                        </td>
+
+                        <td>
+                            <span>{{item.Size}} GB</span>
+                        </td>
+                        <td>
+                            <span>{{item.SnapshotId}}</span>
+                        </td>
+                        <td>
+                            <time>{{item.CreateTime | date: 'MMM dd, yyyy'}}</time>
+                        </td>
+                        <td>
+                            <span>{{item.AvailabilityZone}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.Attachments[0].InstanceId}}</span>
+                        </td>
+
+                        <td>
+
+                            <span class="label label-sm success">{{item.State}}</span>
+                        </td>
+                        <td>
+                            <span ng-if="item.State">Not Encrypted</span>
+                            <span ng-if="!item.State">Encrypted</span>
+                        </td>
+                        <td>
+
+                            <!-- BEGIN THEME PANEL -->
+                            <div class="dropdown ">
+                                <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                                    <i class="material-icons">&#xe5d4;</i>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-scale pull-right">
+
+                                    <a class="dropdown-item" href>
+                                        <span ng-click="setVolumeId(item.VolumeId)">  Create Snapshot
+                                        </span>
+                                    </a>
+                                    <a class="dropdown-item" href>
+                                        <span ng-click="deleteVolume(item)"> Delete
+                                        </span>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                            <!-- END THEME PANEL -->
+
+                        </td>
+
+
+                    </tr>
+                    </tbody>
+
+                    <tbody ng-show="isLoading">
+                    <tr class="white">
+                        <td colspan="10" class="text-center white text-warn"><i class="fa fa-refresh fa-spin"></i> Loading ...
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+                <br><br>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-show="data.length==0">
+            <h4 style="text-align: center" class="theme-font" ng-if="!isLoading">
+                There are no volume in <span ng-bind="region"></span>!
+            </h4>
+
+        </div>
+
+
+    </div>
+
+    <!-- END MAIN CONTENT -->
+</div>
+
+
+<div id="createVolume" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"> Create Volume</h6>
+            </div>
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="createVolume()">
+                <div class="modal-body ">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Type</label>
+
+                        <div class="col-sm-9">
+
+                            <select ng-model="volume.type" class="form-control">
+                                <option value="gp2">General Purpose (SSD)</option>
+                                <option value="standard">Magnetic volumes</option>
+                                <option value="io1">Provisioned IOPS (SSD)</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':((!volume.size) &&  form.size.$invalid && form.size.$dirty && form.size.$touched)}">
+                        <label class="col-sm-3 form-control-label">Size (GB) </label>
+
+                        <div class="col-sm-9">
+                            <input type="number" required ng-model="volume.size" min="1" max="16384" name="size"
+                                   ng-pattern="/^\d*[1-9]\d*$/"
+                                   class="form-control"/>
+
+                            <small ng-show="(!volume.size) && (form.size.$invalid && form.size.$dirty && form.size.$touched)"
+                                   class="help-block">
+                                Not a valid size
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':(form.zone.$invalid && form.zone.$dirty && form.zone.$touched)}">
+                        <label class="col-sm-3 form-control-label">Availability Zone </label>
+
+                        <div class="col-sm-9">
+                            <ui-select ng-model="volume.zone.selected" theme="bootstrap">
+                                <ui-select-match placeholder="Select or search...">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in regions | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+
+                            <p ng-show="(form.zone.$invalid && form.zone.$dirty && form.zone.$touched)"
+                               class="help-block">
+                                <small>Zone is required</small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group last">
+                        <label class="col-sm-3 form-control-label">Encryption</label>
+
+                        <div class="col-sm-6">
+                            <label class="ui-check m-t-xs m-r">
+                                <input type="checkbox" ng-model="volume.encrypted">
+                                <i class="dark-white"></i>
+
+                            </label>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-primary bg-theme-font"
+                            ng-disabled="form.$invalid || isProcessing" id="createVolumeBtn">CREATE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="createSnapshot1" class="modal fade" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font">Create Snapshot</h6>
+            </div>
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="createSnapshot()">
+                <div class="modal-body ">
+
+
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Volume <span class="required"></span></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="snapshot.volume" readonly required
+                                   class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Description</label>
+
+                        <div class="col-sm-9">
+                            <textarea ng-model="snapshot.description"
+                                      placeholder="Short non-compulsory description" maxlength="200" rows="3"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL
+                    </button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || isProcessing"
+                            id="createSnapshotBtn">CREATE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

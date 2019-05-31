@@ -1,0 +1,73 @@
+{
+  "name": "Company",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "companyName": {
+      "type": "string",
+      "required": true
+    },
+    "keyId": {
+      "type": "string"
+    },
+    "userCount": {
+      "type": "number",
+      "default": 1
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "contactNo": {
+      "type": "string"
+    },
+    "createdBy": {
+      "type": "string",
+      "required": "true"
+    },
+    "plan": {
+      "type": "string"
+    },
+
+    "updatedDate": {
+      "type": "date"
+    },
+    "createdDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": []
+}

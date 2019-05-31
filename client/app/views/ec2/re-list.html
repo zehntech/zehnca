@@ -1,0 +1,117 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="describeReservedInstances()">
+
+    <div class="box">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="box-header">
+            <h2>
+                <i class="fa fa-list"></i> Reserved Instance
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="filter" type="search" placeholder="Search"
+                           class="form-control input-sm w-auto inline m-r" ng-model="searchQuery"/>
+                    <a style="margin-left: 4px" class="text-success" ng-click="describeInstances('all')">Show All Region
+                        Instances</a>
+                </div>
+
+            </div>
+            <div class="table-responsive">
+                <table st-table="data" st-pipe="callServer" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th st-sort="Instances[0].Tags[0].Value">Instance Name</th>
+                        <th st-sort="AvailabilityZone">Region</th>
+                        <th st-sort="InstanceType">Type</th>
+                        <th st-sort="Start">Start</th>
+                        <th st-sort="Duration">Duration</th>
+                        <th st-sort="ProductDescription">Platform</th>
+                        <th st-sort="OfferingType">Offering</th>
+                        <th st-sort="RecurringCharges[0].Amount">Recurring Char</th>
+                        <th st-sort="State">State</th>
+
+                    </tr>
+
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr data-ng-repeat="item in data | filter:searchQuery">
+                        <td>
+
+                            <span class="theme-font text-wrap" ng-repeat="name in item.Tags"><span
+                                    ng-if="name.Key =='server-name'" data-placement="tooltip-top"
+                                data-html="true"
+                                data-container="body"
+                                data-type="success"
+                                data-title="{{name.Value}}"
+                                bs-tooltip>{{name.Value}}</span></span>
+
+                        </td>
+
+                        <td>
+                            <span>{{item.AvailabilityZone}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.InstanceType}}</span>
+                        </td>
+                        <td>
+                            <time>{{item.Start | date: 'MMM dd, yyyy'}}</time>
+                        </td>
+
+
+                        <td>
+                            <span>{{item.Duration | parseNumFilter}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.ProductDescription}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.OfferingType}}</span>
+                        </td>
+
+                        <td>
+                            {{item.RecurringCharges[0].Frequency}} {{item.RecurringCharges[0].Amount}}
+                        </td>
+                        <td>
+                            <span ng-if="item.State!='active'" class="label label-sm warning">Stopped</span>
+                            <span ng-if="item.State=='active'" class="label label-sm success">Running</span>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr class="white">
+                        <td colspan="9" class="text-center text-warn"><i class="fa fa-refresh fa-spin"></i> Loading ...
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td><br></td>
+                    </tr>
+
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-hide="data.length>0">
+            <h4 style="text-align: center" class="theme-font" ng-if="!loading">
+                There are no reserved instances in <span ng-bind="region"></span>!
+            </h4>
+
+        </div>
+
+
+    </div>
+    <div ng-if="loading" class="overlay"></div>
+    <div ng-if="loading" class="loading-img"></div>
+
+    <!-- END MAIN CONTENT -->
+</div>
+
+
+

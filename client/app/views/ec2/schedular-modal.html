@@ -1,0 +1,337 @@
+<div id="instanceScheduler" class="modal fade animate " role="dialog" aria-hidden="true" data-backdrop="static"
+     data-ng-controller="SaveScheduleCtrl">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title">{{caption}} SCHEDULER</h6>
+            </div>
+
+            <form class="form-horizontal " name="form" ng-submit="saveScheduler(caption)"
+                  method="post">
+                <div class="modal-body ">
+
+                    <div class="col-sm-12" ng-if="saveSchedulerError">
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{saveSchedulerError}} </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error': (alreadyExit || !scheduler.schedulerName && form.schedulerName.$invalid && form.schedulerName.$dirty && form.schedulerName.$touched)}">
+                        <label class="col-sm-3 form-control-label">Name<span class="required"></span></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" required ng-model="scheduler.schedulerName" placeholder="Schedule Name"
+                                   ng-maxlength="50" name="schedulerName" autofocus
+                                   ng-blur="checkName('snapshot', caption)"
+                                   class="form-control"/>
+
+                            <small ng-show="(!scheduler.schedulerName && form.schedulerName.$invalid && form.schedulerName.$dirty && form.schedulerName.$touched)"
+                                   class="help-block">
+                                Scheduler name is required
+                            </small>
+                            <small ng-show="alreadyExit"
+                                   class="help-block">
+                                {{alreadyExit}}
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Start Days</label>
+
+                        <div class="col-sm-9">
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.monday">
+                                    <i class="dark-white"></i>
+                                    Mon
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.tuesday">
+                                    <i class="dark-white"></i>
+                                    Tue
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.wednesday">
+                                    <i class="dark-white"></i>
+                                    Wed
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.thursday">
+                                    <i class="dark-white"></i>
+                                    Thu
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.friday">
+                                    <i class="dark-white"></i>
+                                    Fri
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.saturday">
+                                    <i class="dark-white"></i>
+                                    Sat
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.sunday">
+                                    <i class="dark-white"></i>
+                                    Sun
+                                </label>
+                            </span>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form.time.$invalid}">
+                        <label class="col-sm-3 form-control-label"><i class="fa fa-clock-o"></i> Start Time</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" size="8" class="form-control"
+                                   ng-model="scheduler.startTime"
+                                   name="time"
+                                   data-icon-up="fa fa-chevron-up"
+                                   data-icon-down="fa fa-chevron-down"
+                                   bs-timepicker>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Stop Days</label>
+
+                        <div class="col-sm-9">
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.monday">
+                                    <i class="dark-white"></i>
+                                    Mon
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.tuesday">
+                                    <i class="dark-white"></i>
+                                    Tue
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.wednesday">
+                                    <i class="dark-white"></i>
+                                    Wed
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.thursday">
+                                    <i class="dark-white"></i>
+                                    Thu
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.friday">
+                                    <i class="dark-white"></i>
+                                    Fri
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.saturday">
+                                    <i class="dark-white"></i>
+                                    Sat
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.sunday">
+                                    <i class="dark-white"></i>
+                                    Sun
+                                </label>
+                            </span>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form.time1.$invalid}">
+                        <label class="col-sm-3 form-control-label"><i class="fa fa-clock-o"></i> Stop Time</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" size="8" class="form-control"
+                                   ng-model="scheduler.stopTime"
+                                   name="time1"
+                                   data-icon-up="fa fa-chevron-up"
+                                   data-icon-down="fa fa-chevron-down"
+                                   bs-timepicker>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL
+                    </button>
+                    <button type="submit"
+                            ng-disabled="(!scheduler.schedulerName || form.$invalid || alreadyExit || isProcessing)"
+                            id="instnaceSchBtn"
+                            class="btn btn-primary">{{caption}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="startModal" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"><i class="fa fa-calendar"></i> Schedule Instance</h6>
+            </div>
+            <form class="form-horizontal " ng-submit="saveChanges()">
+                <div class="modal-body ">
+
+                    <div ng-if="scheduleInstanceError">
+
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{scheduleInstanceError}} </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Instance Name</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="instDetail.Tags[0].Value" readonly
+                                   class="form-control"/>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Instance Region</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="instDetail.Placement.AvailabilityZone" readonly
+                                   class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Start Schedule Name</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <ui-select ng-model="startSchedulerName.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.schedulerName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in startSchedulers | filter: $select.search">
+                                        <small ng-bind-html="item.schedulerName | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                <button type="button" ng-click="startSchedulerName.selected = undefined"
+                                        class="btn white">
+                                    <span class="fa fa-remove"></span>
+                                </button>
+                              </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label class="col-sm-3 form-control-label">Stop Schedule Name</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <ui-select ng-model="stopSchedulerName.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.schedulerName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in stopSchedulers | filter: $select.search">
+                                        <small ng-bind-html="item.schedulerName | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="stopSchedulerName.selected = undefined"
+                                            class="btn white">
+                                        <span class="fa fa-remove"></span>
+                                    </button>
+                                  </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="(isProcessing)" id="scheduleInstnaceBtn">
+                        SAVE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade animate" aria-labelledby="myModalLabel" role="dialog"
+     tabindex="-1" id="nextOcc">
+    <div class="modal-dialog ">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h6 class="modal-title">Next 5 {{action}} scheduler occurrences</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: right">
+                        <label>Schedule Name</label>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="aqua">{{item.schedulerName}}</span>
+                    </div>
+                </div>
+
+                <div class="row" ng-repeat="occ in nextOccerrences.data">
+                    <div class="col-md-4" style="text-align: right">
+                        <label>{{$index+1}}. </label>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="aqua">{{occ | date: 'medium'}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $('.modal').on('shown.bs.modal', function () {
+        $(this).find('[autofocus]').focus();
+    });
+</script>

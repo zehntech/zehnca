@@ -1,0 +1,205 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="descSnapshots()" xmlns="http://www.w3.org/1999/html">
+
+    <div class="box">
+
+        <div class="box-header">
+            <h2 class="caption">
+                <i class="fa fa-list"></i> Snapshots
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+
+                    <input id="filter" type="search" placeholder="Search"
+                           class="form-control input-sm w-auto inline m-r" ng-model="searchQuery"/>
+
+                    <a style="margin-left: 4px" class="text-success" ng-click="descSnapshots('all')">Show All
+                        Region Snapshots</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+
+
+                    <a href="" ng-click="setSnapshot()" class="btn btn-default btn-sm pull-right"
+                       style="margin-left: 8px"><i class="fa fa-plus"></i> Create Snapshot </a>
+                    <a href="" ng-click="setSnapshotScheduler()" class="btn btn-default btn-sm pull-right"
+                       style="margin-left: 8px"><i class="fa fa-plus"></i> Create Scheduler </a>
+                    <a href="" ng-click="getAllScheduler();scheduleSnapshot()"
+                       class="btn btn-default btn-sm pull-right"><i class="fa fa-calendar"></i> Schedule Snapshot</a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table st-table="data" st-pipe="callServer" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th st-sort="Tags[0].Value">Snapshot Name</th>
+                        <th st-sort="SnapshotId">Snapshot ID</th>
+                        <th st-sort="VolumeSize">Volume Size</th>
+                        <th st-sort="Description">Description</th>
+                        <th st-sort="State">State</th>
+                        <th st-sort="Encrypted">Encrypted</th>
+                        <th st-sort="StartTime">Start at</th>
+                        <th>Action</th>
+                    </tr>
+
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr data-ng-repeat="item in data | filter:searchQuery">
+
+                        <td>
+                            <span class="theme-font text-wrap"
+                                  tooltip="{{item.Tags[0].Value}}">{{item.Tags[0].Value}}</span>
+
+                        </td>
+                        <td>
+                            <span>{{item.SnapshotId}}</span>
+
+                        </td>
+                        <td>
+                            <span>{{item.VolumeSize}} GB</span>
+                        </td>
+                        <td>
+                            <span class="text-wrap" data-placement="tooltip-top"
+                                data-html="true"
+                                data-container="body"
+                                data-type="success"
+                                data-title="{{item.Description}}"
+                                bs-tooltip>{{item.Description}}</span>
+                        </td>
+                        <td>
+                                <span ng-if="item.State !='completed'"
+                                      class="label label-sm warning">Pending</span>
+                                <span ng-if="item.State =='completed'"
+                                      class="label label-sm success">Completed</span>
+                        </td>
+                        <td>
+                            <span ng-if="item.State">Not Encrypted</span>
+                            <span ng-if="!item.State">Encrypted</span>
+                        </td>
+                        <td>
+                            <time>{{item.StartTime | date: 'MMM dd, yyyy'}}</time>
+                        </td>
+                        <td data-title="'Action'" align="center">
+                            <div class="dropdown ">
+                                <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                                    <i class="material-icons">&#xe5d4;</i>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-scale pull-right">
+
+                                    <a class="dropdown-item" href ng-click="setSnapshotId(item)">
+                                        <span>  Copy Snapshot
+                                        </span>
+                                    </a>
+                                    <a class="dropdown-item" href ng-click="deleteSnapshot(item)">
+                                        <span> Delete
+                                        </span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="8" class="text-center white text-warn"><i class="fa fa-refresh fa-spin"></i> Loading ...
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+                <br><br>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-show="data.length==0">
+            <h4 style="text-align: center" class="theme-font" ng-if="!isLoading">
+                There are no snapshots in <span ng-bind="region"></span>!
+            </h4>
+
+        </div>
+
+
+    </div>
+
+    <div data-ng-include="'../views/ec2/snapshot-schedular-modal.html'"></div>
+    <!-- END MAIN CONTENT -->
+</div>
+
+
+<div id="copySnapshot" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"> Copy Snapshot</h6>
+            </div>
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="copySnapshot()">
+                <div class="modal-body ">
+
+
+                    <div class="form-group">
+                        <label class="col-sm-12 form-control-label">This snapshot <b>{{copySnapshot.SnapshotId}}</b>,
+                            will
+                            copied to new snapshot. </label>
+
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':((!copySnapshot.destinationRegion.selected) && form.zone.$invalid && form.zone.$dirty && form.zone.$touched)}">
+                        <label class="col-sm-3 form-control-label">Destination Region </label>
+
+                        <div class="col-sm-9">
+                            <ui-select ng-model="copySnapshot.destinationRegion.selected" theme="bootstrap" required=""
+                                       name="zone">
+                                <ui-select-match placeholder="Select or search...">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in regions | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+
+                            <p ng-show="(!copySnapshot.destinationRegion.selected) && (form.zone.$invalid && form.zone.$dirty && form.zone.$touched)"
+                               class="help-block">
+                                <small>Region is required</small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Description</label>
+
+                        <div class="col-sm-9">
+                            <textarea ng-model="copySnapshot.description" rows="3"
+                                      placeholder="Short non-compulsory description" ng-maxlength="200"
+                                      class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="col-sm-3 control-label">Encryption</label>
+
+                        <div class="col-sm-6">
+                            <label class="ui-check m-t-xs m-r">
+                                <input type="checkbox" ng-model="copySnapshot.encrypted">
+                                <i class="dark-white"></i>
+
+                            </label>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL
+                    </button>
+                    <button type="submit" class="btn btn-primary bg-theme-font" ng-disabled="isProcessing"
+                            id="createSnapshotBtn">COPY
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

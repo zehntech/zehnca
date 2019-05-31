@@ -1,0 +1,52 @@
+{
+  "name": "KeyManagement",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "companyId": {
+      "type": "string",
+      "required": true
+    },
+
+    "accessKey": {
+      "type": "string",
+      "required": "true"
+    },
+    "secretKey": {
+      "type": "string",
+      "required": true
+    },
+    "createdDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+     "acls": [
+           {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+     ],
+  "methods": []
+}

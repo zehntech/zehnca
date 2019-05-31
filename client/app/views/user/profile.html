@@ -1,0 +1,74 @@
+  <div class="item">
+    <div class="item-bg">
+      <img ng-src="{{userInfo.photoLink}}" class="blur opacity-3">
+    </div><br>
+<h3 class="padding "><span class="heading-profile uppercase"><span class="bottom-border">Abou</span>t: {{userInfo.name}}</span></h3><br>
+<div class="row padding p-t-0">
+    <div class="col-md-3 col-sm-3 thumbnails">
+        <div class="portlet light">
+
+            <a href="" class="second-effect" >
+                <img  ng-src="{{userInfo.photoLink}}"  width="550" height="550" class="mask img-responsive">
+            </a>
+        </div>
+    </div>
+	<div class="col-md-9 col-sm-9">
+        <div class="box">
+            <div class="box-body">
+                    <div class="profile-table">
+                        <div class="profile-heading"><i class="fa fa-user"></i> <strong>General Information</strong>
+
+                        </div>
+
+                            <table class="table table-striped ">
+                                <tbody>
+                                <tr>
+                                    <th>Name</th>
+                                    <td><span class="text-muted"  ng-bind="userInfo.name" ></span> </td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td><span class="text-muted" ng-bind="userInfo.email" ></span> </td>
+                                </tr>
+                                <tr>
+                                    <th>Company Name</th>
+                                    <td><span class="text-muted"  ng-bind="company.companyName" ></span> </td>
+                                </tr>
+                                <tr>
+                                    <th>Contact No.</th>
+                                    <td><span class="text-muted"  ng-bind="company.contactNo || '-'"></span> </td>
+                                </tr>
+                                <tr>
+                                    <th>Address</th>
+                                    <td><span class="text-muted"   ng-bind="company.address || '-'"></span> </td>
+                                </tr>
+                                <tr>
+                                    <th>City</th>
+                                    <td><span class="text-muted"  ng-bind="company.city || '-'"></span> </td>
+                                </tr>
+                                <tr>
+                                    <th>Country</th>
+                                    <td><span class="text-muted"   ng-bind="company.country || '-'"></span> </td>
+
+                                </tr>
+
+                                <tr>
+                                    <th>Plan</th>
+                                    <td><span class="text-muted" ng-bind="company.plan || 'Freebie'"></span> </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    </div>
+
+
+                    <!-- buttons -->
+              
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <div ng-if="loading" class="overlay"></div>
+    <div ng-if="loading" class="loading-img"></div>
+</div>
+

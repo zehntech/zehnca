@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24">
+	<path d="M 0 8 L 48 8 L 48 40 Z" fill="{{app.setting.color.accent}}" />
+	<path d="M 0 8 L 36 8 L 24 24 Z" fill="rgba(0,0,0,0.15)" />
+	<path d="M 0 8 L 24 8 L 0  40 Z" fill="{{app.setting.color.primary}}" />
+</svg>

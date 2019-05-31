@@ -1,0 +1,184 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding">
+
+    <div class="box">
+
+        <div class="box-header">
+            <h2>
+                <i class="fa fa-list"></i> Log
+            </h2>
+        </div>
+        <div class="padding">
+
+            <div class="">
+                <div class="box-header">
+                    <a>
+                        <h3 style="font-weight: 600">Filter </h3>
+                    </a>
+                </div>
+                <div class="panel-collapse">
+                    <div class="box-body b-t">
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Date range
+
+                            </label>
+
+                            <div class="col-sm-4">
+                                <input type="text" size="8" class="form-control inline"
+                                       ng-model="filter.fromDate"
+                                       data-max-date="{{filter.untilDate}}"
+                                       data-icon-left="fa fa-chevron-left"
+                                       data-icon-right="fa fa-chevron-right"
+                                       placeholder="From"
+                                       bs-datepicker ng-change="load()">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" size="8" class="form-control  inline"
+                                       ng-model="filter.untilDate"
+                                       data-min-date="{{filter.fromDate}}"
+                                       data-icon-left="fa fa-chevron-left"
+                                       data-icon-right="fa fa-chevron-right"
+                                       placeholder="Until"
+                                       bs-datepicker ng-change="load()">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Region
+
+                            </label>
+
+                            <div class="col-sm-8">
+                                <ui-select multiple ng-model="filter.region.selected" theme="bootstrap"
+                                           ng-change="load()">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$item.value}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in regions | filter: $select.search">
+                                        <span ng-bind-html="item.value | highlight: $select.search"></span>
+                                        <small ng-bind-html="item.key | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Event
+
+                            </label>
+
+                            <div class="col-sm-6">
+                            <span ng-if="state == 'snapshotState'">
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="filter.create" ng-change="load()">
+                                    <i class="dark-white"></i>
+                                    Create
+                                </label>
+                            </span>
+                                    <span ng-if="state == 'snapshotState'">
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="filter.delete" ng-change="load()">
+                                    <i class="dark-white"></i>
+                                    Delete
+                                </label>
+                            </span>
+                                    <span ng-if="state == 'instanceState'">
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="filter.start" ng-change="load()">
+                                    <i class="dark-white"></i>
+                                    Start
+                                </label>
+                            </span>
+                                    <span ng-if="state == 'instanceState'">
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="filter.stop" ng-change="load()">
+                                    <i class="dark-white"></i>
+                                    Stop
+                                </label>
+                            </span>
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 form-control-label">Status
+
+                            </label>
+
+                            <div class="col-sm-6">
+                              <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="filter.failure" ng-change="load()">
+                                    <i class="dark-white"></i>
+                                    Failure
+                                </label>
+                            </span>
+                                    <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="filter.success" ng-change="load()">
+                                    <i class="dark-white"></i>
+                                    Success
+                                </label>
+                            </span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ngModel is optional -->
+            <div class=" p-t-0">
+                <div class=" m-b-xs">
+                    <div class="box-header p-l-0 ">
+
+                        <div class="dropdown ">
+                            <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat ">
+                                <span ng-if="state == 'instanceState'"> Instance Logs </span>
+                                <span ng-if="state == 'snapshotState'"> Snapshot Logs </span>
+                                <i class="material-icons">&#xe5c5;</i>
+                            </button>
+
+                            <div class="dropdown-menu dropdown-menu-scale">
+
+                                <a class="dropdown-item" ui-sref="app.log.instance" ui-sref-active="text-muted">
+                                    <span>  Instance Logs</span>
+                                </a>
+                                <a class="dropdown-item" ui-sref="app.log.snapshot" ui-sref-active="text-muted">
+                                        <span> Snapshot Logs
+                                        </span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="b-t">
+                        <div ui-view class="fade-in-right-big smooth pos-rlt"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END MAIN CONTENT -->
+    </div>
+
+
+    <!-- .modal -->
+    <div class="modal fade animate" aria-labelledby="myModalLabel" role="dialog"
+         tabindex="-1" id="open">
+        <div class="modal-dialog model-large">
+            <div class="modal-content zoom">
+                <div class="modal-header">
+                    <button type="button" class="close close-color" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h6 class="modal-title">Log</h6>
+                </div>
+                <div class="modal-body">
+
+                    <pre class="pdf-viewer"><p ng-repeat="data in content">{{data}}</p></pre>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / .modal -->
+</div>
+

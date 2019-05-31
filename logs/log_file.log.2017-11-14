@@ -1,0 +1,10 @@
+{"level":"info","message":"Server is started ","timestamp":"2017-11-14T09:46:30.003Z"}
+{"level":"info","message":"Scheduling getting snapshots","timestamp":"2017-11-14T09:46:30.019Z"}
+{"level":"info","message":"Scheduling getting volumes","timestamp":"2017-11-14T09:46:30.025Z"}
+{"level":"info","message":"Scheduling getting instances","timestamp":"2017-11-14T09:46:30.025Z"}
+{"level":"info","message":"Connect to database ","timestamp":"2017-11-14T09:46:30.026Z"}
+{"level":"info","message":"Fetching all trigger to start ","timestamp":"2017-11-14T09:46:30.026Z"}
+{"level":"info","message":"No data found for instance triggers ","timestamp":"2017-11-14T09:46:30.081Z"}
+{"level":"info","message":"No data found for snapshot triggers ","timestamp":"2017-11-14T09:46:30.081Z"}
+{"level":"info","message":"register new  user user@zehnaws.com company ","timestamp":"2017-11-14T09:46:30.407Z"}
+{"level":"info","message":"register new  user admin@zehnaws.com company ","timestamp":"2017-11-14T09:46:30.616Z"}

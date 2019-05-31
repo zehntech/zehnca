@@ -1,0 +1,315 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding">
+    <div class="box padding">
+        <h3> Welcome to ZehnCloudAutomator..!! <span class="close" data-close="note"></span></h3>
+
+        <p>
+            Looks like you haven't connected your AWS account. It's required for the ZehnAWS experience
+        </p>
+
+        <p>
+            You can invite users and also update your profile (Optional)</a>
+        </p>
+    </div>
+
+    <div class="box">
+        <!-- BEGIN PORTLET-->
+        <div class="padding">
+            <div class="box-header">
+                <h2 class="caption">
+                    <i class="fa fa-info-circle"></i> General Information
+                </h2>
+
+            </div>
+            <div class="portlet-body form">
+                <form ng-submit="update()" name="form" class="form-horizontal">
+
+                    <div class="form-group"
+                         ng-class="{'has-error':((!user.name) && (form.name.$invalid && form.name.$dirty && form.name.$touched))}">
+                        <label class="col-sm-3 form-control-label">Name </label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-user"></i>
+								</span>
+                                <input type="text" ng-model="user.name" required maxlength="50" name="name"
+                                       placeholder="User name" class="form-control"/>
+
+                                <p ng-show="(!user.name) && (form.name.$invalid && form.name.$dirty && form.name.$touched)"
+                                   class="help-block">
+                                    <small>Name is required</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Email</label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-envelope"></i>
+								</span>
+                                <input type="text" ng-model="user.email" readonly
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group"
+                         ng-class="{'has-error':((!company.companyName) && (form.companyName.$invalid && form.companyName.$dirty && form.companyName.$touched))}">
+                        <label class="col-sm-3 form-control-label">Company Name </label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-text-width"></i>
+								</span>
+                                <input type="text" ng-model="company.companyName" placeholder="Company name"
+                                       required
+                                       maxlength="50" name="companyName"
+                                       class="form-control"/>
+                            </div>
+                            <p ng-show="((!company.companyName) && (form.companyName.$invalid && form.companyName.$dirty && form.companyName.$touched))"
+                               class="help-block">
+                                <small>Company name is required</small>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':((!key.accessKey) && (form.accesskey.$invalid && form.accesskey.$dirty && form.accesskey.$touched))}">
+                        <label class="col-sm-3 form-control-label">Access Key </label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-key"></i>
+								</span>
+                                <input type="text" required placeholder="Access Key" name="accesskey"
+                                       class="form-control" ng-model="key.accessKey"/>
+                            </div>
+
+                            <p ng-show="((!key.accessKey) && (form.accesskey.$invalid && form.accesskey.$dirty && form.accesskey.$touched))"
+                               class="help-block">
+                                <small>Access Key is required</small>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="form-group "
+                         ng-class="{'has-error':((!key.secretKey) && (form.secretkey.$invalid && form.secretkey.$dirty && form.secretkey.$touched))}">
+                        <label class="form-control-label col-md-3">Secret Key </label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-key"></i>
+								</span>
+                                <input type="text" required placeholder="Secret Key" name="secretkey"
+                                       class="form-control" ng-model="key.secretKey"/>
+                            </div>
+
+                            <p ng-show="((!key.secretKey) && (form.secretkey.$invalid && form.secretkey.$dirty && form.secretkey.$touched))"
+                               class="help-block">
+                                <small>Secret Key is required</small>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-sm-3 form-control-label">Address</label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-location-arrow"></i>
+								</span>
+                                <ui-select ng-model="company.address"
+                                           theme="bootstrap"
+                                           reset-search-input="false">
+                                    <ui-select-match placeholder="Enter an address...">
+                                        {{$select.selected.formatted_address}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="address in addresses track by $index"
+                                                       refresh="refreshAddresses($select.search)"
+                                                       refresh-delay="0">
+                                        <div ng-bind-html="address.formatted_address | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">City/Town</label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-globe "></i>
+								</span>
+                                <input type="text" ng-model="company.city" placeholder="City/Town" maxlength="30"
+                                       name="city"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Country</label>
+
+                        <div class="col-sm-6">
+
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-globe "></i>
+								</span>
+                                <ui-select ng-model="company.country.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in countries | filter: $select.search">
+                                        <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-sm-3 form-control-label">Contact No.</label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+								<span class="input-group-addon">
+								<i class="fa fa-phone"></i>
+								</span>
+                                <input type="text" ng-model="company.contactNo" maxlength="20" name="contactno"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <button type="submit" class="btn primary"
+                                        ng-disabled="isProcessing" id="submitBtn"> SUBMIT
+
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+
+    <div class="md-fab-bottom-right pos-fix" data-animation="am-flip-x" data-placement="tooltip-top" data-html="true"
+         bs-tooltip="tooltip" data-type="success">
+        <div class="m-b">
+            <a class="md-btn md-fab md-mini m-b-sm blue" data-target="#myModal_autocomplete" data-toggle="modal">
+                <i class="fa fa-user-plus"></i>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+<div id="myModal_autocomplete" class="modal fade animate" data-backdrop="static" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font">Invite your friends, colleagues!</h6>
+            </div>
+            <form ng-submit="updateInviteUserInfo()" class="form-horizontal form-row-seperated"
+                  name="form">
+                <div class="modal-body ">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Name (Optional)</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-user"></i>
+												</span>
+                                <input type="text" ng-model="inviteUser.name" placeholder="Name"
+                                       name="name" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':(alreadyExit || (!inviteUser.email && !form.emailId.$pristine) || form.emailId.$invalid && !form.emailId.$pristine && form.emailId.$touched)}">
+                        <label class="col-sm-3 form-control-label">Email ID <span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-envelope"></i>
+												</span>
+                                <input type="email" ng-model="inviteUser.email" required maxlength="150"
+                                       ng-blur="checkEmail(inviteUser.email)"
+                                       placeholder="Email Id"
+                                       name="emailId" class="form-control"/>
+                            </div>
+                            <p ng-show="((!inviteUser.email && !form.emailId.$pristine) || form.emailId.$invalid && !form.emailId.$pristine && form.emailId.$touched)"
+                               class="help-block">
+                                <small>Email Id is required</small>
+                            </p>
+                            <p ng-show="alreadyExit"
+                               class="help-block">
+                                <small>{{alreadyExit}}</small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Message (Optional)</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-text-width"></i>
+												</span>
+                                                <textarea rows="3" ng-model="inviteUser.message" placeholder="Message"
+                                                          maxlength="120"
+                                                          name="message" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group last">
+                        <label class="col-sm-3 form-control-label">Role</label>
+
+                        <div class="col-sm-8">
+                            <div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-user-plus"></i>
+												</span>
+                                <select class="form-control" ng-model="inviteUser.role">
+                                    <option value="admin">Admin</option>
+                                    <option value="user">User</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-primary "
+                            ng-disabled="form.$invalid || isProcessing || alreadyExit" id="inviteBtn">
+                        INVITE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

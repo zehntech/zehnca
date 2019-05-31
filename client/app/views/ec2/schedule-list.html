@@ -1,0 +1,130 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="getAllScheduler()">
+
+    <div class="box">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="box-header">
+            <h2 class="caption">
+                <i class="fa fa-list"></i> Instance Scheduler
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="filter" type="search" placeholder="Search"
+                           class="form-control input-sm w-auto inline m-r" ng-model="query"/>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a href="" ng-click="setInstanceScheduler()" class="btn btn-default btn-sm pull-right">
+                        <i class="fa fa-plus"></i> Create Scheduler</a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table ng-table="tableParams" class="table table-striped table-hover">
+                    <tbody>
+                    <tr data-ng-repeat="item in $data | filter:query">
+                        <td data-title="'Name'" sortable="'schedulerName'">
+                            <span tooltip="{{item.schedulerName}}" class="text-wrap">{{item.schedulerName}}</span>
+                        </td>
+                        <td data-title="'Start Schedule at'" sortable="'startScheduleExp'">
+                            <a href="" ng-click="getNextOccurrence(item, 'start')"
+                               data-placement="tooltip-top"
+                                data-html="true"
+                                data-container="body"
+                                data-type="success"
+                                data-title="{{item.startScheduleExp}}"
+                                bs-tooltip
+
+                               class="text-wrap">
+                                {{item.startScheduleExp ||
+                                'None'}}</a>
+                        </td>
+                        <td data-title="'Stop Schedule at'" sortable="'stopScheduleExp'">
+                            <a href="" ng-click="getNextOccurrence(item, 'stop')"
+                                                              data-placement="tooltip-top"
+                                data-html="true"
+                                data-container="body"
+                                data-type="success"
+                                data-title="{{item.stopScheduleExp}}"
+                                bs-tooltip
+
+                               class="text-wrap">
+                                {{item.stopScheduleExp || 'None'}}</a>
+                        </td>
+                        <td data-title="'Start Status'" sortable="'start'">
+                            <button class="btn start-btn" ng-show="item.startScheduleExp" ng-if="item.start"
+                                    ng-click="stopStartScheduler(item)">
+                                <span class="label label-sm success">Running</span>
+                            </button>
+                            <button class="btn stop-btn" ng-show="item.startScheduleExp" ng-if="!item.start"
+                                    ng-click="startStartScheduler(item)">
+                                <span class="label label-sm warning">Stop</span>
+                            </button>
+                            <button class="btn stop-btn" ng-show="!item.startScheduleExp" ng-if="!item.start"
+                                    ng-click="setInstanceScheduler(item)">
+                                <span class="label label-sm warning">Stop</span>
+                            </button>
+                        </td>
+                        <td data-title="'Stop Status'" sortable="'stop'">
+                            <button class="btn start-btn" ng-show="item.stopScheduleExp" ng-if="item.stop"
+                                    ng-click="stopStopScheduler(item)">
+                                <span class="label label-sm success">Running</span>
+                            </button>
+                            <button class="btn stop-btn" ng-show="item.stopScheduleExp" ng-if="!item.stop"
+                                    ng-click="startStopScheduler(item)">
+                                <span class="label label-sm warning">Stop</span>
+                            </button>
+                            <button class="btn stop-btn" ng-show="!item.stopScheduleExp" ng-if="!item.stop"
+                                    ng-click="setInstanceScheduler(item)">
+                                <span class="label label-sm warning">Stop</span>
+                            </button>
+                        </td>
+                        <td data-title="'Last Updated'" sortable="'updatedDate'">
+                            <time>{{item.updatedDate | date: 'MMM dd, yyyy'}}</time>
+                        </td>
+                        <td data-title="'Action'" align="center">
+                            <div class="dropdown ">
+                                <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                                    <i class="material-icons">&#xe5d4;</i>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-scale pull-right">
+
+                                    <a class="dropdown-item" href ng-click="setInstanceScheduler(item)">
+                                        <span>  Edit
+                                        </span>
+                                    </a>
+                                    <a class="dropdown-item" href ng-click="delete(item)">
+                                        <span> Remove
+                                        </span>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-if="!loading" ng-show="data.length==0">
+            <h4 style="text-align: center" class="theme-font">
+                There is no scheduler for instances!
+            </h4>
+        </div>
+
+    </div>
+    <div ng-if="loading" class="overlay"></div>
+    <div ng-if="loading" class="loading-img"></div>
+    <div data-ng-include="'../views/ec2/schedular-modal.html'"></div>
+
+</div>
+<!-- END MAIN CONTENT -->
+
+
+

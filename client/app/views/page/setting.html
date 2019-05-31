@@ -1,0 +1,180 @@
+<div class="row-col" ng-controller="ProfileCtrl">
+    <div class="col-sm-3 col-lg-2">
+        <div class="p-y">
+            <div class="nav-active-border left b-{{app.setting.theme.primary}}">
+                <ul class="nav nav-sm">
+                    <li class="nav-item">
+                        <a class="nav-link block active" href data-toggle="tab" data-target="#tab-1">Profile</a>
+                    </li>
+                    <li class="nav-item" ng-if="userInfo.role == 'admin'">
+                        <a class="nav-link block" href data-toggle="tab" data-target="#tab-2">Key Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link block" href data-toggle="tab" data-target="#tab-4">Upgrade</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link block" href data-toggle="tab" data-target="#tab-5">Security</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9 col-lg-10 light lt bg-auto">
+        <div class="tab-content pos-rlt">
+            <div class="tab-pane active" id="tab-1">
+                <div class="p-a-md dker _600">General
+                profile</div>
+                <form role="form" class="p-a-md col-md-6" name="form" ng-submit="saveUser()">
+                    <div class="form-group">
+                        <label>Profile picture</label>
+
+                        <div class="form-file">
+                            <input type="file" id="fileInput" accept="image/*" nv-file-select="" uploader="uploader">
+                            <button class="btn white">Upload new picture</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" ng-model="userInfo.name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" class="form-control" ng-model="company.companyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact</label>
+                        <input type="text" class="form-control" ng-model="company.contactNo" maxlength="20">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Address</label>
+
+                        <ui-select ng-model="company.address"
+                                   theme="bootstrap"
+                                   reset-search-input="false">
+                          <ui-select-match placeholder="Enter an address...">{{$select.selected.formatted_address}}</ui-select-match>
+                          <ui-select-choices repeat="address in addresses track by $index"
+                                   refresh="refreshAddresses($select.search)"
+                                   refresh-delay="0">
+                          </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" ng-model="company.city" ng-maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label>Country</label>
+                        <ui-select ng-model="company.country" theme="bootstrap">
+                            <ui-select-match placeholder="Select or search...">
+                                {{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="item in countries | filter: $select.search">
+                                <div ng-bind-html="item.name | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+
+                    <button type="submit" class="btn btn-info m-t">UPDATE</button>
+                </form>
+
+            </div>
+            <div class="tab-pane" id="tab-2" ng-controller="KeyCtrl">
+                <div class="p-a-md dker _600">Key
+                settings</div>
+                <form role="form" class="p-a-md col-md-6" name="form" ng-submit="keyStore()">
+                    <div class="form-group"
+                         ng-class="{'has-error':((!keyMang.accessKey && !form.accesskey.$pristine) || form.accesskey.$invalid && !form.accesskey.$pristine && form.accesskey.$touched)}">
+                        <label>Access Key</label>
+                        <input type="text" placeholder="Access Key" name="accesskey" class="form-control"
+                               ng-model="keyMang.accessKey"/>
+
+                        <p ng-show="(!keyMang.accessKey && !form.accesskey.$pristine) || (form.accesskey.$invalid && !form.accesskey.$pristine && form.accesskey.$touched)"
+                           class="help-block">
+                            <small>Access Key is required</small>
+                        </p>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error':((!keyMang.secretKey && !form.secretkey.$pristine) || form.secretkey.$invalid && !form.secretkey.$pristine && form.secretkey.$touched)}">
+                        <label>Secret Key</label>
+                        <input type="text" placeholder="Secret Key" name="secretkey" class="form-control"
+                               ng-model="keyMang.secretKey"/>
+
+                        <p ng-show="(!keyMang.secretKey && !form.secretkey.$pristine) || (form.secretkey.$invalid && !form.secretkey.$pristine && form.secretkey.$touched)"
+                           class="help-block">
+                            <small>Secret Key is required</small>
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn btn-info m-t">UPDATE</button>
+                </form>
+            </div>
+
+            <div class="tab-pane" id="tab-4">
+                <div class="p-a-md dker _600">Upgrade</div>
+                <form role="form" class="p-a-md col-md-6">
+                    <p>Select your plan</p>
+
+                    <div class="checkbox">
+                        <label class="ui-check">
+                            <input type="checkbox"><i class="dark-white"></i> Schedule is run
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label class="ui-check">
+                            <input type="checkbox"><i class="dark-white"></i> Only on error
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label class="ui-check">
+                            <input type="checkbox"><i class="dark-white"></i> Only on success
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-info m-t">UPDATE</button>
+                </form>
+            </div>
+            <div class="tab-pane" id="tab-5" ng-controller="ChangePasswordCtrl">
+                <div class="p-a-md dker _600">Security</div>
+                <div class="p-a-md">
+                    <div class="clearfix m-b-lg">
+                        <form role="form" name="form" class="col-md-6 p-a-0 form-validation" ng-submit="save()">
+
+                            <div class="form-group"
+                                 ng-class="{'has-error': (err || form.oldPassword.$invalid && !form.oldPassword.$pristine && form.oldPassword.$touched)}">
+                                <label>Old Password</label>
+                                <input type="password" class="form-control" ng-model="user.oldPassword"
+                                       name="oldPassword" required ng-focus="clear()">
+                                <small ng-show="err"
+                                       class="help-block">
+                                    {{err}}
+                                </small>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': (form.newPassword.$invalid && !form.newPassword.$pristine && form.newPassword.$touched)}">
+                                <label>New Password</label>
+                                <input type="password" class="form-control" ng-model="user.newPassword"
+                                       name="newPassword" required>
+                            </div>
+                            <div class="form-group"
+                                 ng-class="{'has-error': form.confirmPassword.$error.validator && form.confirmPassword.$invalid && !form.confirmPassword.$pristine && form.confirmPassword.$touched}">
+                                <label>New Password Again</label>
+                                <input type="password" class="form-control" ng-model="user.confirmPassword"
+                                       name="confirmPassword" required ui-validate=" '$value== user.newPassword' "
+                                       ui-validate-watch=" 'newPassword' ">
+                                <span class="help-block" ng-show='form.confirmPassword.$error.validator'>Passwords do not match!</span>
+                            </div>
+                            <button type="submit" class="btn btn-info m-t" ng-disabled="form.$invalid || isProcessing"
+                                    id="changePwdBtn">UPDATE
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

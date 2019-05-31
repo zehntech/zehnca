@@ -1,0 +1,75 @@
+{
+  "name": "Notification",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "instanceId": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string",
+      "required": true
+    },
+    "companyId": {
+      "type": "string",
+      "required": "true"
+    },
+    "notifyEmailID": {
+      "type": "string"
+    },
+    "notifyName": {
+      "type": "string"
+    },
+    "startNotifyTime": {
+      "type": "string"
+    },
+    "stopNotifyTime": {
+      "type": "string"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "createdBy": {
+      "type": "string"
+    },
+    "updatedDate": {
+      "type": "date"
+    },
+    "createdDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": []
+}

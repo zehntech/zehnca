@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "sources": [
+      "../common/models",
+      "./models",
+      "../node_modules/loopback-component-passport/lib/models"
+    ]
+  },
+  "User": {
+    "dataSource": "zehnaws",
+    "public": false
+  },
+  "accessToken": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "userCredential": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "userIdentity": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "ACL": {
+    "dataSource": "zehnaws",
+    "public": false
+  },
+  "Email": {
+    "dataSource": "emailDs",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Role": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "InstanceSchedule": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "SnapshotSchedule": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "KeyManagement": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Scheduler": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Company": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Invite": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Price": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Logger": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+    "Notification": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "AuthProvider": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+   "Instance": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+   "Snapshot": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "Volume": {
+    "dataSource": "zehnaws",
+    "public": true
+  },
+  "user": {
+    "dataSource": "zehnaws",
+    "public": true,
+    "options": {
+      "emailVerificationRequired": true
+    }
+  }
+}

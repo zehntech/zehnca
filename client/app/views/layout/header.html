@@ -1,0 +1,108 @@
+<div class="navbar">
+    <a data-toggle="collapse" data-target="#navbar-4" class="navbar-item pull-right hidden-md-up m-a-0 m-l">
+        <i class="material-icons">&#xe5d2;</i>
+    </a>
+
+    <div ui-include="'../views/blocks/navbar.brand.html'"></div>
+
+    <!-- nabar right -->
+    <ul class="nav navbar-nav pull-right">
+        <li class="nav-item">
+            <a class="nav-link" ui-fullscreen>
+              <span data-placement="bottom-left"
+                    data-html="true"
+                    data-container="body"
+                    data-type="success"
+                    data-title="{{fullscreen}}"
+                    bs-tooltip><i class="fa fa-fw fa-arrows-v"></i></span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" ng-click="sync()">
+              <span><i id="sync" class="fa fa-refresh" data-placement="bottom-left"
+                       data-html="true"
+                       data-container="body"
+                       data-type="success" data-title="{{syncTooltip}}"
+                       bs-tooltip></i></span>
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a href class="nav-link" data-toggle="dropdown">
+                <i  data-placement="bottom-left"
+               data-html="true"
+               data-container="body"
+               data-type="success"
+               data-title="{{region}}"
+               bs-tooltip class="material-icons">&#xe55f;</i>
+                <span class="label p-a-0 warn">{{region}}</span>
+            </a>
+
+            <div ui-include="'../views/blocks/dropdown.notification.html'"></div>
+        </li>
+        <li class="nav-item dropdown">
+            <a href class="nav-link dropdown-toggle clear" data-toggle="dropdown" data-placement="bottom-left"
+               data-html="true"
+               data-container="body"
+               data-type="success"
+               data-title="{{user.name}}"
+               bs-tooltip>
+              <span class="avatar w-32">
+                <img ng-src="{{user.photoLink}}" alt="...">
+                <i class="busy b-white right"></i>
+              </span>
+            </a>
+
+            <div class="dropdown-menu pull-right dropdown-menu-scale">
+                <a class="dropdown-item" ui-sref="app.page.profile">
+                    <span> <i class="fa fa-user"></i> Profile</span>
+                </a>
+                <a class="dropdown-item" ui-sref="app.page.setting">
+                    <span> <i class="fa fa-cog"></i> Settings</span>
+                </a>
+
+                <a class="dropdown-item" ui-sref="app.users" ng-if="isAdmin">
+                    <span> <i class="fa fa-user-plus"></i> User</span>
+                </a>
+                <a class="dropdown-item" ui-sref="app.log.instance">
+                    <span> <i class="fa fa-file"></i> Logs</span>
+                </a>
+
+                <div class="dropdown-divider"></div>
+
+                <a class="dropdown-item" ng-click="logout()"><i class="fa fa-sign-out"></i> Sign out</a>
+            </div>
+
+        </li>
+    </ul>
+    <!-- / navbar right -->
+
+    <!-- navbar collapse -->
+    <div class="collapse navbar-toggleable-sm" id="navbar-4">
+        <!--  <div ui-include="'../views/blocks/navbar.form.right.html'"></div>-->
+        <!-- link and dropdown -->
+        <ul class="nav navbar-nav pull-left nav-active-border b-{{app.setting.theme.primary}}">
+            <li class="nav-item">
+                <a href="" class="nav-link" ui-sref="app.dashboard" ui-sref-active="active">
+                    <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown pos-stc">
+                <a href class="nav-link dropdown-toggle" data-toggle="dropdown" ui-sref-active="active">
+                    <span class="nav-text">EC2 Service</span>
+                </a>
+
+                <div ui-include="'../views/blocks/dropdown.mega.html'"></div>
+            </li>
+            <li class="nav-item">
+                <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown" ui-sref-active="active">
+                    <span class="nav-text">Trigger</span>
+                </a>
+
+                <div ui-include="'../views/blocks/dropdown.schduler.html'"></div>
+            </li>
+
+        </ul>
+        <!-- / link and dropdown -->
+    </div>
+    <!-- / navbar collapse -->
+</div>

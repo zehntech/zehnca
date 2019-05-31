@@ -1,0 +1,82 @@
+{
+  "name": "Scheduler",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "schedulerName": {
+      "type": "string",
+      "required": "true"
+    },
+    "startScheduleExp": {
+      "type": "string"
+    },
+    "start": {
+      "type": "boolean"
+    },
+    "startSchedulerInstance": {
+      "type": "object"
+    },
+    "stopScheduleExp": {
+      "type": "string"
+    },
+    "stop": {
+      "type": "boolean"
+    },
+    "stopSchedulerInstance": {
+      "type": "object"
+    },
+    "schedulerType": {
+      "type": "string",
+      "required": "true"
+    },
+    "deleteOtherThan": {
+      "type": "number"
+    },
+    "companyId": {
+      "type": "string",
+      "required": "true"
+    },
+    "createdBy": {
+      "type": "string",
+      "required": "true"
+    },
+    "updatedBy": {
+      "type": "string"
+    },
+    "updatedDate": {
+      "type": "date"
+    },
+    "createdDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": []
+}

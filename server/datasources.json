@@ -1,0 +1,29 @@
+
+{
+  "zehnaws": {
+    "host": "localhost",
+    "port": 27017,
+    "database": "zehnaws",
+    "name": "zehnaws",
+    "connector": "mongodb"
+  },
+  "emailDs": {
+    "name": "emailDs",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "xyz.com", // write your host here
+        "secure": false,
+        "port": 25,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "########", // Your Mail authentication user name
+          "pass": "*******" // Your Mail authentication password
+        }
+      }
+    ]
+  }
+}

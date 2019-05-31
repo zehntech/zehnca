@@ -1,0 +1,50 @@
+<div class="table-responsive">
+    <table ng-table="tableParams" class="table table-striped table-hover">
+        <tbody>
+        <tr data-ng-repeat="item in $data track by $index">
+            <td data-title="'Sr No.'">
+                <span>{{$index +1}}</span>
+
+            </td>
+            <td data-title="'File'">
+                <a href="" class="fa fa-file" ng-click="openFile(item.file)"></a>
+
+            </td>
+            <td data-title="'Transaction ID'" sortable="'id'">
+                <span class=" text-wrap">{{item.id}}</span>
+
+            </td>
+            <td data-title="'Instance ID'" sortable="'instanceId'">
+                <span>{{item.instanceId}}</span>
+            </td>
+            <td data-title="'Region'" sortable="'region'">
+                <span>{{item.region}}</span>
+            </td>
+            <td data-title="'Trigger'" sortable="'schedulerName'">
+                <span>{{item.schedulerName}}</span>
+            </td>
+            <td data-title="'Event'" sortable="'event'">
+                <span ng-if="item.event == 'stop'">Stop</span>
+
+                <span ng-if="item.event == 'start'">Start</span>
+            </td>
+            <td data-title="'Status'" sortable="'result'">
+                                <span ng-if="item.result == 'failure'"
+                                      class="label label-sm warning">Failure</span>
+
+                                <span ng-if="item.result == 'success'"
+                                      class="label label-sm success">Success</span>
+            </td>
+            <td data-title="'Start At'" sortable="'createdAt'">
+                <span>{{item.createdAt | date: 'MMM dd, yyyy hh:mm a'}}</span>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div ng-if="loading" class="overlay"></div>
+<div ng-if="loading" class="loading-img"></div>
+

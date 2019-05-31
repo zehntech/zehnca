@@ -1,0 +1,489 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="describeInstances()">
+
+    <div class="box">
+
+        <div class="box-header">
+            <h2>
+                <i class="fa fa-list"></i> Instances
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="filter" type="search" placeholder="Search"
+                           class="form-control input-sm w-auto inline m-r" ng-model="searchQuery"/>
+
+
+                    <a style="margin-left: 4px" class="text-success" ng-click="describeInstances('all')">Show All
+                        Region Instances</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a href="" ng-click="setInstanceScheduler()" class="btn btn-default btn-sm pull-right"><i
+                            class="fa fa-plus"></i> Create Scheduler </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+
+                <table st-table="data" st-pipe="callServer" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th st-sort="Instances[0].Tags[0].Value">Instance Name</th>
+                        <th st-sort="Instances[0].InstanceId">Instance ID</th>
+                        <th st-sort="Instances[0].InstanceType">Instance Type</th>
+                        <th st-sort="Instances[0].Platform">Platform</th>
+                        <th st-sort="Instances[0].Placement.AvailabilityZone">Region</th>
+                        <th st-sort="Instances[0].State.Name">State</th>
+                        <th st-sort="Schedule">Schedule</th>
+                        <th st-sort="Instances[0].PublicIpAddress">IP Address</th>
+                        <th>Action</th>
+                    </tr>
+
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="item in data | filter:searchQuery">
+                        <td>
+                            <a href ng-if="item.Notify" data-toggle="modal" data-target="#showAlert"
+                               ng-click="getAttachedAlert(item.Instances[0].InstanceId)"
+                               class="label label-sm  primary up" style="margin-left: -10px !important;"><i
+                                    class="fa fa-bell"></i></a>
+                            <span class="theme-font text-wrap" ng-repeat="name in item.Instances[0].Tags">
+                            <span
+                                    ng-if="name.Key =='Name'" data-placement="tooltip-top"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-type="success"
+                                    data-title="{{name.Value}}"
+                                    bs-tooltip>{{name.Value}}</span>
+                        </span>
+                        </td>
+                        <td>{{item.Instances[0].InstanceId}}</td>
+                        <td>{{item.Instances[0].InstanceType}}</td>
+                        <td>{{item.Instances[0].Platform || 'Linux'}}</td>
+                        <td>{{item.Instances[0].Placement.AvailabilityZone}}</td>
+                        <td>
+                                <span ng-if="item.Instances[0].State.Name=='stopped'"
+                                      class="label label-sm warning">Stopped</span>
+                                <span ng-if="item.Instances[0].State.Name !='stopped' && item.Instances[0].State.Name !='running'"
+                                      class="label label-sm label-info">Pending..</span>
+                                <span ng-if="item.Instances[0].State.Name=='running'"
+                                      class="label label-sm success">Running</span>
+                        </td>
+                        <td>
+                            <a href ng-if="item.Schedule" data-toggle="modal" data-target="#showScheduler"
+                               ng-click="getAttachedScheduler(item.Instances[0].InstanceId)"
+                               class="label label-sm primary">Active</a>
+                            <span ng-if="!item.Schedule">-</span>
+                        </td>
+                        <td>{{item.Instances[0].PublicIpAddress || ' - '}}</td>
+                        <td>
+                            <div class="dropdown ">
+                                <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                                    <i class="material-icons">&#xe5d4;</i>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-scale pull-right">
+
+                                    <a class="dropdown-item" href>
+                                        <span ng-if="item.Instances[0].State.Name =='stopped'"
+                                              ng-click="startInstance(item.Instances[0])"
+                                              title="Start Instance"> Start Instance
+                                        </span>
+                                        <span ng-if="item.Instances[0].State.Name =='running'"
+                                              ng-click="stopInstance(item.Instances[0])"
+                                              data-title="Stop Instance">
+                                            Stop Instance
+                                        </span>
+                                        <span ng-if="item.Instances[0].State.Name =='running' && item.Instances[0].State.Name=='stopped'">Waiting...</span>
+                                    </a>
+                                    <a class="dropdown-item" href data-toggle="modal" data-target="#startModal"
+                                       ng-click="getAllScheduler1();setInstance(item.Instances[0])">
+                                        <span>  Schedule</span>
+                                    </a>
+                                    <a class="dropdown-item" href ng-click="setID(item.Instances[0])">
+                                        <span> Create Image
+                                        </span>
+                                    </a>
+                                    <a class="dropdown-item" href ng-click="setAlert(item.Instances[0])"
+                                       ng-if="item.Schedule">
+                                        <span> Alert </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="9" class="text-center white text-warn"><i class="fa fa-refresh fa-spin"></i>
+                            Loading ...
+                        </td>
+                    </tr>
+                    </tbody>
+
+
+                </table>
+                <br> <br><br>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-hide="data.length>0">
+            <h4 style="text-align: center" class="theme-font" ng-if="!isLoading">
+                There are no instances in <span ng-bind="region"></span>!
+            </h4>
+
+        </div>
+
+    </div>
+
+    <div ng-include="'../views/ec2/schedular-modal.html'"></div>
+    <!-- END MAIN CONTENT -->
+
+
+    <div id="createImage" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content zoom">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h6 class="modal-title theme-font"> Create Image</h6>
+                </div>
+                <form class="form-horizontal " name="form" ng-submit="createImage()">
+                    <div class="modal-body ">
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 form-control-label">Instance ID </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" ng-model="image.instanceId" readonly
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             ng-class="{'has-error':(!image.name && form.name.$invalid && form.name.$dirty && form.name.$touched)}">
+                            <label class="col-sm-3 form-control-label">Name</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" ng-model="image.name" required name="name" autofocus id="name"
+                                       placeholder="Image name"
+                                       class="form-control"/>
+
+                                <small class="help-block"
+                                       ng-show="!image.name && form.name.$invalid && !form.name.$pristine && form.name.$touched"
+                                        >Name is required
+                                </small>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 form-control-label">Description</label>
+
+                            <div class="col-sm-9">
+                            <textarea rows="3" ng-model="image.description"
+                                      placeholder="Short non-compulsory description"
+                                      class="form-control"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group last">
+                            <label class="col-sm-3 form-control-label">No Reboot <i data-animation="am-flip-x"
+                                                                                    data-placement="tooltip-top"
+                                                                                    data-html="true"
+                                                                                    bs-tooltip="tooltip"
+                                                                                    data-type="success"
+                                                                                    class="fa fa-question-circle"></i></label>
+
+                            <div class="col-sm-9">
+
+                                <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="radio" ng-model="image.reboot" name="radio">
+                                    <i class="dark-white"></i>
+                                    Yes
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="radio" ng-model="image.reboot" name="radio">
+                                    <i class="dark-white"></i>
+                                    No
+                                </label>
+                            </span>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL
+                        </button>
+                        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || isProcessing"
+                                id="createImageBtn">CREATE
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="setAlert" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content zoom">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h6 class="modal-title theme-font"> Alert</h6>
+                </div>
+                <form class="form-horizontal form-row-seperated" name="form" ng-submit="saveNotify()">
+                    <div class="modal-body ">
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 form-control-label">Instance ID </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" ng-model="notify.instanceId" readonly
+                                       class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 form-control-label">Alert On</label>
+
+                            <div class="col-sm-9">
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="notify.start">
+                                    <i class="dark-white"></i>
+                                    Start
+                                </label>
+                            </span>
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="notify.stop">
+                                    <i class="dark-white"></i>
+                                    Stop
+                                </label>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 form-control-label">Notify Name </label>
+
+                            <div class="col-sm-9">
+                                <input type="text" ng-model="notify.notifyName" required
+                                       placeholder="Email owner name"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 form-control-label">Notify Email ID </label>
+
+                            <div class="col-sm-9">
+                                <input type="email" ng-model="notify.notifyMailId" required placeholder="Email ID"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="notify.start || notify.stop">
+                            <label class="col-sm-3 form-control-label">Alert Time</label>
+
+                            <div class="col-sm-4">
+
+                                <select class="form-control" data-ng-model="notify.time">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    <option value="60">60</option>
+                                </select>
+                            </div>
+                            <span class="col-sm-3 form-control-label">Minutes</span>
+                        </div>
+                        <div class="form-group" ng-show="notify.start && notify.stop">
+                            <label class="col-sm-3 form-control-label">Use same configuration</label>
+
+                            <div class="col-sm-9">
+                            <span>
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="notify.sameConfig">
+                                    <i class="dark-white"></i>
+
+                                </label>
+                            </span>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-hide="notify.sameConfig">
+                            <label class="col-sm-3 form-control-label">Alert Time for Stop</label>
+
+                            <div class="col-sm-4">
+
+                                <select class="form-control" data-ng-model="notify.stopTime">
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                    <option value="60">60</option>
+                                </select>
+                            </div>
+                            <span class="col-sm-3 form-control-label">Minutes</span>
+                            <!--                            <div class="col-sm-5">
+                                                            <select class="form-control" data-ng-model="notify.stopTimeString">
+                                                                <option value="minute">Minute</option>
+                                                                <option value="hour">Hour</option>
+                                                            </select>
+                                                        </div>-->
+
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL
+                        </button>
+                        <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">SAVE</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="showScheduler" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content zoom">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h6 class="modal-title theme-font"> Attached Trigger</h6>
+                </div>
+
+                <div class="modal-body ">
+                    <div>
+                        <table st-table="attachedSchedules" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th st-sort="schedulerName">Trigger Name</th>
+                                <th st-sort="schedulerType">Instance ID</th>
+                                <th st-sort="startScheduleExp">Start at</th>
+                                <th st-sort="stopScheduleExp">Stop at</th>
+                                <th>Action</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in attachedSchedules">
+
+                                <td><span class="text-wrap">{{item.schedulerName}}</span></td>
+                                <td>{{item.schedulerType}}</td>
+                                <td><span class="text-wrap" data-placement="tooltip-top"
+                                          data-html="true"
+                                          data-container="body"
+                                          data-type="success"
+                                          data-title="{{item.startScheduleExp}}"
+                                          bs-tooltip>{{item.startScheduleExp}}</span></td>
+                                <td><span class="text-wrap" data-placement="tooltip-top"
+                                          data-html="true"
+                                          data-container="body"
+                                          data-type="success"
+                                          data-title="{{item.stopScheduleExp}}"
+                                          bs-tooltip>{{item.stopScheduleExp}}</span></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button md-ink-ripple data-toggle="dropdown"
+                                                class="md-btn md-flat md-btn-circle" ng-click="removeInstance(item)">
+                                            <i class="material-icons">&#xe15d;</i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="showAlert" class="modal fade animate" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content zoom">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h6 class="modal-title theme-font"> Attached Alert</h6>
+                </div>
+
+                <div class="modal-body ">
+                    <div>
+                        <table st-table="attachedAlert" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th st-sort="instanceId">Instance ID</th>
+                                <th st-sort="notifyEmailID">Notify To</th>
+                                <th st-sort="startExp">Start Notify Time</th>
+                                <th st-sort="stopExp">Stop Notify Time</th>
+                                <th st-sort="createdDate">created at</th>
+                                <th>Action</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in attachedAlert">
+
+                                <td><span>{{item.instanceId}}</span></td>
+                                <td><span class="text-wrap"data-placement="tooltip-top"
+                                          data-html="true"
+                                          data-container="body"
+                                          data-type="success"
+                                          data-title="{{item.notifyEmailID}}"
+                                          bs-tooltip>{{item.notifyEmailID}}</span></td>
+                                <td><span class="text-wrap" data-placement="tooltip-top"
+                                          data-html="true"
+                                          data-container="body"
+                                          data-type="success"
+                                          data-title="{{item.startExp}}"
+                                          bs-tooltip>{{item.startExp}}</span></td>
+                                <td><span class="text-wrap" data-placement="tooltip-top"
+                                          data-html="true"
+                                          data-container="body"
+                                          data-type="success"
+                                          data-title="{{item.stopExp}}"
+                                          bs-tooltip>{{item.stopExp}}</span></td>
+                                <td><span class="text-wrap">{{item.createdDate | date :'MMM dd, yyyy'}}</span></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button md-ink-ripple data-toggle="dropdown"
+                                                class="md-btn md-flat md-btn-circle" ng-click="deleteAlert(item)">
+                                            <i class="material-icons">&#xe15d;</i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    $('.modal').on('shown.bs.modal', function () {
+        $(this).find('[autofocus]').focus();
+    });
+</script>

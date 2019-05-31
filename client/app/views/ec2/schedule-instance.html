@@ -1,0 +1,164 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="getAllScheduleInstance()">
+
+    <div class="box">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="box-header">
+            <h2>
+                <i class="fa fa-list"></i> Schedule Instance
+            </h2>
+
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="search" placeholder="Search" class="form-control input-sm w-auto inline m-r"
+                           ng-model="searchQuery"/>
+                </div>
+            </div>
+            <div class="table-responsive ">
+                <table ng-table="tableParams" class="table table-striped table-hover">
+                    <tbody>
+                    <tr data-ng-repeat="item in $data | filter:query">
+                        <td data-title="'Instance Id'" sortable="'instanceId'">
+                            <span class="text-wrap">{{item.instanceId}}</span>
+                        </td>
+                        <td data-title="'Region'" sortable="'instanceRegion'">
+                            <span class="text-wrap">{{item.instanceRegion}}</span>
+                        </td>
+                        <td data-title="'Start Scheduler Name'" sortable="'startSchedulerName'">
+                                <span class="text-wrap">
+                                    {{item.startSchedulerName ||
+                                    'None'}}</span>
+                        </td>
+                        <td data-title="'Stop Scheduler Name'" sortable="'stopSchedulerName'">
+                            <span class="text-wrap">{{item.stopSchedulerName || 'None'}}</span>
+                        </td>
+                        <td data-title="'Created at'" sortable="'createdDate'">
+                            <time>{{item.createdDate | date: 'MMM dd, yyyy hh:mm:a'}}</time>
+                        </td>
+                        <td data-title="'Action'" align="center">
+                            <div class="dropdown ">
+                                <button md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                                    <i class="material-icons">&#xe5d4;</i>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-scale pull-right">
+
+                                    <a class="dropdown-item" href data-toggle="modal" data-target="#editSchedule" ng-click="changeScheduler(item)">
+                                        <span>  Edit </span>
+                                    </a>
+                                    <a class="dropdown-item" href ng-click="removeInstance(item)">
+                                        <span> Remove
+                                        </span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-if="!loading" ng-show="data.length==0">
+            <h5 style="text-align: center" class="theme-font">
+                Its seem that you have not schedule any instance yet! <a class="text-blue" href=""
+                                                                         ui-sref="app.instance">Click here</a> to
+                schedule.
+            </h5>
+        </div>
+
+    </div>
+    <div ng-if="loading" class="overlay"></div>
+    <div ng-if="loading" class="loading-img"></div>
+    <div data-ng-include="'../views/ec2/schedular-modal.html'"></div>
+
+</div>
+<!-- END MAIN CONTENT -->
+
+
+<div id="editSchedule" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static"
+     data-ng-controller="InstanceCtrl">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"><i class="fa fa-calendar"></i> Schedule</h6>
+            </div>
+            <form class="form-horizontal " ng-submit="updateChanges()">
+                <div class="modal-body ">
+
+                    <div ng-if="scheduleInstanceError">
+
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{scheduleInstanceError}} </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12 form-control-label">This instance <b>{{item.instanceId}}</b> in region <b>{{item.instanceRegion}}</b> schedule at</label>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Start Schedule Name</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <ui-select ng-model="startSchedulerName.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.schedulerName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in startSchedulers | filter: $select.search">
+                                        <small ng-bind-html="item.schedulerName | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                <button type="button" ng-click="startSchedulerName.selected = undefined"
+                                        class="btn white">
+                                    <span class="fa fa-remove"></span>
+                                </button>
+                              </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group ">
+                        <label class="col-sm-3 form-control-label">Stop Schedule Name</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <ui-select ng-model="stopSchedulerName.selected" theme="bootstrap">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.schedulerName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in stopSchedulers | filter: $select.search">
+                                        <small ng-bind-html="item.schedulerName | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" ng-click="stopSchedulerName.selected = undefined"
+                                            class="btn white">
+                                        <span class="fa fa-remove"></span>
+                                    </button>
+                                  </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="(isProcessing)" id="scheduleInstnaceBtn">
+                        SAVE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

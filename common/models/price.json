@@ -1,0 +1,42 @@
+{
+  "name": "Price",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "number"
+    },
+    "discount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "period": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "num_of_schedule": {
+      "type": "number"
+    },
+    "num_of_user": {
+      "type": "number"
+    },
+    "updatedDate": {
+      "type": "date"
+    },
+    "createdDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

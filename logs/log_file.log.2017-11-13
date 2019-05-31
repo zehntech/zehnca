@@ -1,0 +1,16 @@
+{"level":"info","message":"Server is started ","timestamp":"2017-11-13T09:41:16.810Z"}
+{"level":"info","message":"Scheduling getting volumes","timestamp":"2017-11-13T09:41:16.873Z"}
+{"level":"info","message":"Scheduling getting instances","timestamp":"2017-11-13T09:41:16.874Z"}
+{"level":"info","message":"Scheduling getting snapshots","timestamp":"2017-11-13T09:41:16.867Z"}
+{"level":"info","message":"Connect to database ","timestamp":"2017-11-13T09:41:16.874Z"}
+{"level":"info","message":"Fetching all trigger to start ","timestamp":"2017-11-13T09:41:16.874Z"}
+{"level":"info","message":"No data found for snapshot triggers ","timestamp":"2017-11-13T09:41:17.087Z"}
+{"level":"info","message":"No data found for instance triggers ","timestamp":"2017-11-13T09:41:17.088Z"}
+{"level":"info","message":"Server is started ","timestamp":"2017-11-13T09:41:39.752Z"}
+{"level":"info","message":"Scheduling getting snapshots","timestamp":"2017-11-13T09:41:39.767Z"}
+{"level":"info","message":"Scheduling getting volumes","timestamp":"2017-11-13T09:41:39.772Z"}
+{"level":"info","message":"Scheduling getting instances","timestamp":"2017-11-13T09:41:39.773Z"}
+{"level":"info","message":"Connect to database ","timestamp":"2017-11-13T09:41:39.773Z"}
+{"level":"info","message":"Fetching all trigger to start ","timestamp":"2017-11-13T09:41:39.773Z"}
+{"level":"info","message":"No data found for instance triggers ","timestamp":"2017-11-13T09:41:39.814Z"}
+{"level":"info","message":"No data found for snapshot triggers ","timestamp":"2017-11-13T09:41:39.824Z"}

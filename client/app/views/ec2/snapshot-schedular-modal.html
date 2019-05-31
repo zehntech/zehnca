@@ -1,0 +1,419 @@
+
+
+<div id="createSnapshotScheduler" class="modal fade" role="dialog" aria-hidden="true" data-backdrop="static"
+     data-ng-controller="SaveScheduleCtrl">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content form">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font">{{caption}} SCHEDULER</h6>
+            </div>
+
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="saveSnapshotScheduler(caption)"
+                  method="post">
+                <div class="modal-body ">
+
+                    <div class="col-sm-12" ng-if="saveSchedulerError">
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            <span>{{saveSchedulerError }} </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{'has-error': (alreadyExit || !scheduler.schedulerName && form.schedulerName.$invalid && form.schedulerName.$dirty && form.schedulerName.$touched)}">
+                        <label class="col-sm-3 form-control-label">Name<span class="required"></span></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" required ng-model="scheduler.schedulerName" placeholder="Schedule Name"
+                                   ng-maxlength="50" name="schedulerName" autofocus ng-blur="checkName('snapshot',caption)"
+                                   class="form-control"/>
+
+                            <small ng-show="(!scheduler.schedulerName && form.schedulerName.$invalid && !form.schedulerName.$pristine && form.schedulerName.$touched)"
+                               class="help-block">
+                                Scheduler name is required
+                            </small>
+                            <small ng-show="alreadyExit"
+                               class="help-block">
+                                {{alreadyExit}}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label class="col-sm-12 form-control-label">Create Snapshot Schedule
+                            <i class="fa fa-question-circle" data-animation="am-flip-x" data-placement="tooltip-top" data-html="true" bs-tooltip="CREATED_SNAPSHOT_SCHEDULER_TOOLTIP" data-type="success"></i></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Run at</label>
+
+                        <div class="col-sm-9">
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.monday">
+                                    <i class="dark-white"></i>
+                                    Mon
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.tuesday">
+                                    <i class="dark-white"></i>
+                                    Tue
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.wednesday">
+                                    <i class="dark-white"></i>
+                                    Wed
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.thursday">
+                                    <i class="dark-white"></i>
+                                    Thu
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.friday">
+                                    <i class="dark-white"></i>
+                                    Fri
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.saturday">
+                                    <i class="dark-white"></i>
+                                    Sat
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.startDay.sunday">
+                                    <i class="dark-white"></i>
+                                    Sun
+                                </label>
+                            </span>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': form.time.$invalid}">
+                        <label class="col-sm-3 form-control-label"><i class="fa fa-clock-o"></i> Time</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" size="8" class="form-control"
+                                   ng-model="scheduler.startTime"
+                                   name="time"
+                                   data-icon-up="fa fa-chevron-up"
+                                   data-icon-down="fa fa-chevron-down"
+                                   bs-timepicker>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label class="col-sm-12 form-control-label">Delete Snapshot Schedule
+                            <i class="fa fa-question-circle"
+                               data-animation="am-flip-x" data-placement="tooltip-top" data-html="true" bs-tooltip="DELETE_SNAPSHOT_SCHEDULER_TOOLTIP" data-type="success"></i>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Older than</label>
+
+                        <div class="col-sm-4">
+                            <select class="form-control" data-ng-model="scheduler.olderThanNum">
+                                <option value="0">00</option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-5">
+                            <select class="form-control" data-ng-model="scheduler.olderThanString">
+                                <option value="day">Day</option>
+                                <option value="week">Week</option>
+                                <option value="month">Month</option>
+                                <option value="year">Year</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Run at</label>
+
+
+                        <div class="col-sm-9">
+                          <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.monday">
+                                    <i class="dark-white"></i>
+                                    Mon
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.tuesday">
+                                    <i class="dark-white"></i>
+                                    Tue
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.wednesday">
+                                    <i class="dark-white"></i>
+                                    Wed
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.thursday">
+                                    <i class="dark-white"></i>
+                                    Thu
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.friday">
+                                    <i class="dark-white"></i>
+                                    Fri
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.saturday">
+                                    <i class="dark-white"></i>
+                                    Sat
+                                </label>
+                            </span>
+                            <span >
+                                <label class="ui-check m-t-xs m-r">
+                                    <input type="checkbox" ng-model="scheduler.stopDay.sunday">
+                                    <i class="dark-white"></i>
+                                    Sun
+                                </label>
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="form-group "  ng-class="{'has-error': form.time1.$invalid}">
+                        <label class="col-sm-3 form-control-label"><i class="fa fa-clock-o"></i> Time</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" size="8" class="form-control"
+                                   ng-model="scheduler.stopTime"
+                                   name="time1"
+                                   data-icon-up="fa fa-chevron-up"
+                                   data-icon-down="fa fa-chevron-down"
+                                   bs-timepicker>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL</button>
+                    <button type="submit" ng-disabled="(!scheduler.schedulerName || form.schedulerName.$invalid || alreadyExit)" class="btn btn-primary bg-theme-font" >{{caption}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="createSnapshot" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"> Create Snapshot</h6>
+            </div>
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="createSnapshot()">
+                <div class="modal-body ">
+
+                    <div class="form-group"  ng-class="{'has-error':(form.vollist.$invalid && !form.vollist.$pristine && form.vollist.$touched)}">
+                        <label class="col-sm-3 form-control-label">Volume </label>
+
+                        <div class="col-sm-9">
+                            <ui-select ng-model="snapshot.volume.selected" theme="bootstrap" required name="vollist">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.VolumeId}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in volumes | filter: $select.search">
+                                        <div ng-bind-html="item.VolumeId | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                               <p ng-show="(form.vollist.$invalid && !form.vollist.$pristine && form.vollist.$touched)" class="help-block">
+                                 <small>Volume ID is required</small>
+                               </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Description</label>
+
+                        <div class="col-sm-9">
+                            <textarea  ng-model="snapshot.description" rows="3"
+                                   placeholder="Short non-compulsory description" ng-maxlength="200"
+                                   class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"  ng-click="reset()">CANCEL</button>
+                    <button type="submit" class="btn btn-primary bg-theme-font"  ng-disabled="isProcessing"  id="createSnapshotBtn">CREATE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="scheduleSnapshot" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"><i class="fa fa-calendar"></i> Schedule Snapshot</h6>
+            </div>
+
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="saveSnapshot()">
+                <div class="modal-body">
+
+                    <div class="form-group" ng-class="{'has-error':((!volume && !form.vollist.$pristine) || form.vollist.$invalid && !form.vollist.$pristine && form.vollist.$touched)}">
+                        <label class="col-sm-3 form-control-label">Volume <span class="required"></span></label>
+
+                        <div class="col-sm-9">
+                            <ui-select ng-model="volume.selected" theme="bootstrap" required name="vollist">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.VolumeId}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in volumes | filter: $select.search">
+                                        <div ng-bind-html="item.VolumeId | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            <small ng-show="(!volume && !form.vollist.$pristine) || (form.vollist.$invalid && !form.vollist.$pristine && form.vollist.$touched)" class="help-block">
+                                 Volume ID is required
+                            </small>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 form-control-label">Description</label>
+
+                        <div class="col-sm-9">
+                            <textarea ng-model="snapshot.description" rows="3"
+                                   placeholder="Short non-compulsory description" ng-maxlength="200"
+                                   class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':((!startSchedulerName && !form.schlist.$pristine) || form.schlist.$invalid && !form.schlist.$pristine && form.schlist.$touched)}">
+                        <label class="col-sm-3 form-control-label">Schedule Name <span class="required"></span></label>
+
+                        <div class="col-sm-9">
+                            <ui-select ng-model="startSchedulerName.selected" theme="bootstrap" required name="schlist">
+                                    <ui-select-match placeholder="Select or search...">
+                                        {{$select.selected.schedulerName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in startSchedulers | filter: $select.search">
+                                        <div ng-bind-html="item.schedulerName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+
+                            <small ng-show="(!startSchedulerName && !form.schlist.$pristine) || (form.schlist.$invalid && !form.schlist.$pristine && form.schlist.$touched)" class="help-block">
+                                 Schedule is required
+                            </small>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL</button>
+                    <button type="submit" class="btn btn-primary bg-theme-font" ng-disabled="form.$invalid || isProcessing"  id="scheduleSnapshotBtn">
+                        SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade animate" aria-labelledby="myModalLabel" role="dialog"
+     tabindex="-1" id="nextOcc">
+    <div class="modal-dialog ">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h6 class="modal-title">Next 5 {{action}} scheduler occurrences</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4" style="text-align: right">
+                        <label class="">Schedule Name</label>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="aqua">{{item.schedulerName}}</span>
+                    </div>
+                </div>
+
+                <div class="row" ng-repeat="occ in nextOccerrences.data">
+                    <div class="col-md-4" style="text-align: right">
+                        <label class="">{{$index+1}}. </label>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="aqua">{{occ | date: 'medium'}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $('.modal').on('shown.bs.modal', function() {
+      $(this).find('[autofocus]').focus();
+    });
+</script>

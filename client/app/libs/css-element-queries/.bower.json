@@ -1,0 +1,28 @@
+{
+  "name": "css-element-queries",
+  "version": "0.3.0",
+  "main": [
+    "./src/ElementQueries.js",
+    "./src/ResizeSensor.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "_*",
+    "Gruntfile.js",
+    "composer.json",
+    "package.json",
+    "*.html"
+  ],
+  "dependencies": {},
+  "homepage": "https://github.com/marcj/css-element-queries",
+  "_release": "0.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.3.0",
+    "commit": "6fbaa67c90ab2afcc44af9419ea2f6b068f9be52"
+  },
+  "_source": "git://github.com/marcj/css-element-queries.git",
+  "_target": "~0.3.0",
+  "_originalSource": "css-element-queries",
+  "_direct": true
+}

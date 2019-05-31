@@ -1,0 +1,60 @@
+{
+  "name": "SnapshotSchedule",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+
+    "volumeId": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "startSchedulerName": {
+      "type": "string"
+    },
+    "companyId": {
+      "type": "string",
+      "required": "true"
+    },
+    "region": {
+      "type": "string",
+      "required": true
+    },
+    "createdDate": {
+      "type": "date"
+    },
+    "updatedDate": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": []
+}

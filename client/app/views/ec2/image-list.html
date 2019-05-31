@@ -1,0 +1,163 @@
+<!-- BEGIN MAIN CONTENT -->
+<div class="padding" data-ng-init="descImages()">
+
+    <div class="box">
+
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+
+        <div class="box-header">
+            <h2>
+                <i class="fa fa-list"></i> Images
+            </h2>
+        </div>
+        <div class="padding">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input id="filter" type="search" placeholder="Search" class="form-control input-sm w-auto inline m-r" ng-model="searchQuery"/>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a href="" ng-click="setID()" class="btn btn-default btn-sm pull-right"><i class="fa fa-plus"></i>
+                        Create Image </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table ng-table="tableParams" class="table table-striped table-hover">
+                    <tbody>
+                    <tr data-ng-repeat="item in $data | filter:searchQuery">
+
+
+                        <td data-title="'Image Id'" sortable="'ImageId'">
+                            <span>{{item.ImageId}}</span>
+
+                        </td>
+                        <td data-title="'Source'" sortable="'ImageLocation'">
+                            <span>{{item.ImageLocation}}</span>
+                        </td>
+                        <td data-title="'Type'" sortable="'ImageType'">
+                            <span>{{item.ImageType}}</span>
+                        </td>
+                        <td data-title="'Owner'" sortable="'OwnerId'">
+                            <span>{{item.OwnerId}}</span>
+                        </td>
+                        <td data-title="'Visibility'" sortable="'Public'">
+                            <span>{{item.Public}}</span>
+                        </td>
+
+                        <td data-title="'Status'" sortable="'State'">
+                            <span ng-if="item.State !='available'"
+                                  class="label label-sm label-warning">Not Available</span>
+                                <span ng-if="item.State =='available'"
+                                      class="label label-sm label-success">Available</span>
+                        </td>
+                        <td data-title="'Created Date'" sortable="'CreationDate'">
+                            <time>{{item.CreationDate | date: 'MMM dd, yyyy'}}</time>
+                        </td>
+
+                        <td data-title="'Root Device'" sortable="'RootDeviceType'">
+                            <span>{{item.RootDeviceType}}</span>
+                        </td>
+                        <td data-title="'Virtualization'" sortable="'VirtualizationType'">
+                            <span>{{item.VirtualizationType}}</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+        <div class="box-body" ng-if="!loading" ng-show="data.length==0">
+            <h4 style="text-align: center" class="theme-font">
+                There are no image in <span ng-bind="region"></span>!
+            </h4>
+
+        </div>
+
+    </div>
+    <div ng-if="loading" class="overlay"></div>
+    <div ng-if="loading" class="loading-img"></div>
+
+    <!-- END MAIN CONTENT -->
+</div>
+
+<div id="createImage" class="modal fade animate" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content zoom">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h6 class="modal-title theme-font"> Create Image</h6>
+            </div>
+            <form class="form-horizontal form-row-seperated" name="form" ng-submit="createImage()">
+                <div class="modal-body ">
+                    <div class="form-group"
+                         ng-class="{'has-error':(form.zone.$invalid && form.zone.$dirty && form.zone.$touched)}">
+                        <label class="col-sm-3 form-control-label">Instance ID ></label>
+
+                        <div class="col-sm-9">
+                            <ui-select ng-model="image.instanceId.selected" theme="bootstrap">
+                                <ui-select-match placeholder="Select or search...">
+                                    {{$select.selected.value}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="item in regions | filter: $select.search">
+                                    <div ng-bind-html="item.value | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+
+                            <p ng-show="(form.zone.$invalid && form.zone.$dirty && form.zone.$touched)"
+                               class="help-block">
+                                <small>Instance ID is required</small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-group"
+                         ng-class="{'has-error':(!image.name && form.name.$invalid && form.name.$dirty && form.name.$touched)}">
+                        <label class="col-sm-3 control-label">Name <span class="required"></span></label>
+
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="image.name" required name="name" autofocus id="name" placeholder="Image name"
+                                   class="form-control"/>
+
+                            <small class="help-block"
+                                   ng-show="!image.name && form.name.$invalid && !form.name.$pristine && form.name.$touched"
+                                    >Name is required
+                            </small>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Description</label>
+
+                        <div class="col-sm-9">
+                            <textarea rows="3" ng-model="image.description"
+                                   placeholder="Short non-compulsory description"
+                                   class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group last">
+                        <label class="col-sm-3 control-label">No Reboot <i data-animation="am-flip-x" data-placement="tooltip-top" data-html="true" bs-tooltip="tooltip" data-type="success"
+                                                                           class="fa fa-question-circle"></i></label>
+
+                        <div class="col-sm-9">
+                            <select ng-model="image.reboot" class="form-control">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="reset()">CANCEL
+                    </button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="form.$invalid || isProcessing"
+                            id="createImageBtn">CREATE
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
