@@ -30,7 +30,7 @@
     "get-env": "0.4.0",
     "hashmap": "^2.0.3",
     "later": "^1.1.10",
-    "lodash": "3.10.1",
+    "lodash": "4.17.19",
     "loopback": "2.19.0",
     "loopback-boot": "2.6.4",
     "loopback-component-passport": "1.1.2",
