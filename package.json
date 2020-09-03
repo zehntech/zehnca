@@ -31,7 +31,7 @@
     "hashmap": "^2.0.3",
     "later": "^1.1.10",
     "lodash": "3.10.1",
-    "loopback": "2.19.0",
+    "loopback": "3.27.0",
     "loopback-boot": "2.6.4",
     "loopback-component-passport": "1.1.2",
     "loopback-component-storage": "1.2.0",
